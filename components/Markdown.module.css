@@ -1,0 +1,39 @@
+.markdown {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.markdown h1, .markdown h2, .markdown h3 {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+.markdown p {
+  margin-bottom: var(--space-4);
+}
+
+.markdown code {
+  background-color: #f1f5f9;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+}
+
+.markdown pre {
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin-bottom: var(--space-4);
+}
+
+.markdown ul, .markdown ol {
+  margin-left: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.markdown li {
+  margin-bottom: var(--space-1);
+}

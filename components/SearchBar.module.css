@@ -1,0 +1,22 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.icon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.input {
+  padding-left: 45px !important;
+  height: 50px;
+  font-size: 1rem;
+  box-shadow: var(--shadow-sm);
+}

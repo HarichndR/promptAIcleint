@@ -1,0 +1,72 @@
+.section {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.section h3 {
+  margin-bottom: var(--space-6);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.comment {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #f1f5f9;
+  color: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.body {
+  flex: 1;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.commentHeader strong {
+  font-size: 0.9375rem;
+}
+
+.commentHeader span {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.body p {
+  color: var(--color-text-primary);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.noComments {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: var(--space-4) 0;
+}
