@@ -1,7 +1,20 @@
 import React from 'react';
 import { PromptForm } from '@/components/PromptForm';
 
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
+
 export default function CreatePromptPage() {
+  const router = useRouter();
+  const { user, loading } = useAuthContext();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login?message=Sign in to share your prompt');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) return null;
   return (
     <div className="site-container animate-reveal" style={{ padding: 'var(--space-16) 0' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>

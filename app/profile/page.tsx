@@ -55,14 +55,11 @@ export default function ProfilePage() {
     }
   }, [user?._id, user?.name, user?.bio, user?.avatar]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!authLoading && !user) {
-      const timer = setTimeout(() => {
-        if (!user) router.push('/login');
-      }, 500);
-      return () => clearTimeout(timer);
+      router.push('/login?message=Identity synchronization required');
     }
-  }, [user?._id, authLoading, router]);
+  }, [user, authLoading, router]);
 
 
   const toggleInterest = (id: string) => {

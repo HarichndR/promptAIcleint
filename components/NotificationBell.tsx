@@ -4,20 +4,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { notificationApi } from '@/services/api';
 import type { Notification as AppNotification } from '@/types';
 import { Bell } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export const NotificationBell: React.FC = () => {
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = async () => {
+    if (!user) return; // Silent guard for guests
     try {
       const { data } = await notificationApi.getNotifications();
       setNotifications(data.notifications || []);
       setUnreadCount(data.unreadCount || 0);
     } catch (err) {
-      console.error('Failed to fetch notifications');
+      // Graceful silence for background polling errors
     }
   };
 

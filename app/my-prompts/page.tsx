@@ -29,7 +29,9 @@ export default function MyPromptsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/');
+    if (!loading && !user) {
+      router.push('/login?message=Sign in to view your collection');
+    }
   }, [user, loading, router]);
 
   useEffect(() => {

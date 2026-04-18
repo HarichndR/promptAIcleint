@@ -47,15 +47,33 @@ export const CommentSection: React.FC<{ promptId: string }> = ({ promptId }) => 
     <div className="comment-section">
       <h3>Comments ({comments.length})</h3>
 
-      <form className="comment-form" onSubmit={handleSubmit}>
-        <Textarea
-          placeholder="Share your thoughts or modifications..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          rows={3}
-        />
-        <Button type="submit" disabled={!newComment.trim()}>Post Comment</Button>
-      </form>
+      {user ? (
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <Textarea
+            placeholder="Share your thoughts or modifications..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            rows={3}
+          />
+          <Button type="submit" disabled={!newComment.trim()}>Post Comment</Button>
+        </form>
+      ) : (
+        <div className="clean-border" style={{ 
+          padding: 'var(--space-8)', 
+          textAlign: 'center', 
+          backgroundColor: '#f8fafc',
+          borderRadius: 'var(--radius-lg)',
+          marginBottom: 'var(--space-8)',
+          border: '1px dashed var(--color-border)'
+        }}>
+          <p style={{ fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-4)' }}>
+            Join the collective intelligence.
+          </p>
+          <Button onClick={() => requireAuth(() => {})} variant="outline">
+            Sign in & Post Modification
+          </Button>
+        </div>
+      )}
 
       <div className="comment-list">
         {isLoading ? (

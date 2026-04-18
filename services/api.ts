@@ -4,13 +4,20 @@ import type { Notification as AppNotification } from '../types';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prmptaibackend.onrender.com/api';
 
 async function fetcher<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  const isFormData = options?.body instanceof FormData;
+  
+  const headers: HeadersInit = {
+    ...options?.headers,
+  };
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const res = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    headers,
   });
 
   const data = await res.json();
@@ -28,27 +35,24 @@ export const authApi = {
   logout: () => fetcher<void>('/auth/logout', { method: 'POST' }),
   getMe: () => fetcher<{ user: User }>('/auth/me'),
   completeOnboarding: (interests: string[]) => fetcher<{ user: User }>('/auth/onboarding', { method: 'PUT', body: JSON.stringify({ interests }) }),
-  updateProfile: (data: FormData) => fetch(`${API_BASE_URL}/auth/profile`, {
+  updateProfile: (data: FormData) => fetcher<{ user: User }>('/auth/profile', {
     method: 'PUT',
     body: data,
-    credentials: 'include',
-  }).then(res => res.json() as Promise<ApiResponse<{ user: User }>>),
+  }),
 };
 
 // Prompts
 export const promptApi = {
   getPrompts: (params?: string) => fetcher<PaginatedResponse<Prompt>>(`/prompts${params ? `?${params}` : ''}`),
   getPromptById: (id: string) => fetcher<Prompt & { isLiked: boolean; isSaved: boolean }>(`/prompts/${id}`),
-  createPrompt: (formData: FormData) => fetch(`${API_BASE_URL}/prompts`, {
+  createPrompt: (formData: FormData) => fetcher<Prompt>('/prompts', {
     method: 'POST',
     body: formData,
-    credentials: 'include',
-  }).then(res => res.json() as Promise<ApiResponse<Prompt>>),
-  updatePrompt: (id: string, formData: FormData) => fetch(`${API_BASE_URL}/prompts/${id}`, {
+  }),
+  updatePrompt: (id: string, formData: FormData) => fetcher<Prompt>(`/prompts/${id}`, {
     method: 'PUT',
     body: formData,
-    credentials: 'include',
-  }).then(res => res.json() as Promise<ApiResponse<Prompt>>),
+  }),
   deletePrompt: (id: string) => fetcher<void>(`/prompts/${id}`, { method: 'DELETE' }),
   toggleLike: (id: string) => fetcher<{ likes: number }>(`/prompts/${id}/like`, { method: 'POST' }),
   toggleSave: (id: string) => fetcher<void>(`/prompts/${id}/save`, { method: 'POST' }),

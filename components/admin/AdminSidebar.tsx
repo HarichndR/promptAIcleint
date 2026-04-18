@@ -9,11 +9,8 @@ import {
   FolderTree, 
   Users, 
   UserCircle, 
-  PlusCircle, 
-  ExternalLink,
   ShieldCheck,
   X,
-  ArrowLeft,
   LogOut
 } from 'lucide-react';
 
@@ -81,10 +78,6 @@ export const AdminSidebar = ({ isOpen, onClose }: SidebarProps) => {
         </nav>
 
         <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px' }}>
-          <Link href="/" className={styles.backLink}>
-            <ArrowLeft size={16} /> Exit to Site
-          </Link>
-          
           <button 
             onClick={handleLogout}
             style={{ 

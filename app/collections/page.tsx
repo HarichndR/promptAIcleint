@@ -10,6 +10,7 @@ import { Bookmark, Sparkles, Compass, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CollectionsPage() {
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,33 +19,20 @@ export default function CollectionsPage() {
     if (user) {
       promptApi.getSavedPrompts()
         .then(({ data }) => setPrompts(data))
+        .catch(() => {})
         .finally(() => setIsLoading(false));
     } else if (!authLoading) {
       setIsLoading(false);
     }
   }, [user, authLoading]);
+  
+  React.useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login?message=Sign in to view your collection');
+    }
+  }, [user, authLoading, router]);
 
-  // Handle Auth guard
-  if (!authLoading && !user) {
-    return (
-      <div className="site-container flex-center" style={{ minHeight: '60vh', textAlign: 'center' }}>
-        <div className="animate-reveal">
-           <div style={{ backgroundColor: 'var(--color-primary-soft)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: 'var(--color-primary)' }}>
-              <Bookmark size={32} />
-           </div>
-           <h2>Collections are private</h2>
-           <p style={{ maxWidth: '400px', margin: '16px auto 24px' }}>Log in to see your personalized collection and keep track of the prompts that inspire you.</p>
-           <button 
-             className="btn-base btn-primary btn-md" 
-             onClick={() => window.location.reload()} // AuthModal usually handles this, but we're forcing a check
-             style={{ padding: '0 32px' }}
-           >
-             Log In to View
-           </button>
-        </div>
-      </div>
-    );
-  }
+  if (authLoading || !user) return null;
 
   return (
     <div className="animate-reveal">
