@@ -1,7 +1,7 @@
 import type { ApiResponse, PaginatedResponse, Prompt, Category, Comment, User } from '../types';
 import type { Notification as AppNotification } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prmptaibackend.onrender.com/api';
 
 async function fetcher<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
   const res = await fetch(`${API_BASE_URL}${endpoint}`, {
