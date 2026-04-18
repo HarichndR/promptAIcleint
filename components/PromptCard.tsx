@@ -7,7 +7,8 @@ import { Prompt } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { promptApi } from '../services/api';
 import { CommentDrawer } from './CommentDrawer';
-import { Heart, Share2, Bookmark, ArrowRight } from 'lucide-react';
+import { Heart, Share2, Bookmark, ArrowRight, ZoomIn } from 'lucide-react';
+import { Lightbox } from './ui/Lightbox';
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -16,7 +17,8 @@ interface PromptCardProps {
 export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
   const { requireAuth } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
   // Interaction State
   const [likes, setLikes] = useState(prompt.likes || 0);
   const [isLiked, setIsLiked] = useState(prompt.isLiked || false);
@@ -41,7 +43,7 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
       const prevLikes = likes;
       setIsLiked(!prevIsLiked);
       setLikes(prevIsLiked ? prevLikes - 1 : prevLikes + 1);
-      
+
       try {
         const { data } = await promptApi.toggleLike(prompt._id);
         setLikes(data.likes);
@@ -60,7 +62,7 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
       // Optimistic update
       const prevIsSaved = isSaved;
       setIsSaved(!prevIsSaved);
-      
+
       try {
         await promptApi.toggleSave(prompt._id);
       } catch (err) {
@@ -88,40 +90,57 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
     <>
       <div className="prompt-card reveal-up">
         {/* IMAGE TOP SECTION */}
-        <Link href={`/prompts/${prompt._id}`} className="card-img-wrapper" style={{ borderBottom: 'none' }}>
-           <Image 
-            src={prompt.imageUrl} 
-            alt={prompt.title} 
+        <div className="card-img-wrapper" style={{ borderBottom: 'none', position: 'relative' }}>
+          <Image
+            src={prompt.imageUrl}
+            alt={prompt.title}
             fill
             className="card-img"
-            style={{ borderRadius: '12px 12px 0 0' }}
+            style={{ borderRadius: '12px 12px 0 0', objectFit: 'cover' }}
           />
+          
+          {/* CINEMATIC DISCOVERY OVERLAY */}
+          <div className="card-image-overlay" onClick={() => setIsLightboxOpen(true)}>
+             <div className="flex-row" style={{ gap: '8px', color: 'white', fontWeight: 800, fontSize: '0.8rem' }}>
+                <ZoomIn size={18} /> Review Full Asset
+             </div>
+          </div>
+
           {/* FLOATING CATEGORY TAG */}
-          <div style={{ 
-            position: 'absolute', top: '16px', left: '16px', 
-            backgroundColor: 'rgba(255, 255, 255, 0.95)', padding: '4px 12px', 
-            borderRadius: '99px', fontSize: '0.7rem', fontWeight: 800, 
+          <div style={{
+            position: 'absolute', top: '16px', left: '16px',
+            backgroundColor: 'var(--color-surface)', padding: '4px 12px',
+            borderRadius: '99px', fontSize: '0.7rem', fontWeight: 800,
             color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            boxShadow: 'var(--shadow-sm)', zIndex: 10
           }}>
             {prompt.category.name}
           </div>
-        </Link>
+
+          {/* Link overlay for navigation (excluding buttons) */}
+          <Link href={`/prompts/${prompt._id}`} style={{ position: 'absolute', inset: 0, zIndex: 5 }} />
+        </div>
+
+        <Lightbox 
+          isOpen={isLightboxOpen} 
+          onClose={() => setIsLightboxOpen(false)} 
+          imageUrl={prompt.imageUrl} 
+        />
 
         {/* CONTENT BOTTOM SECTION */}
         <div className="card-content">
           <Link href={`/prompts/${prompt._id}`} style={{ textDecoration: 'none' }}>
             {/* AUTHOR */}
             <div className="flex-row" style={{ gap: '8px', marginBottom: '16px' }}>
-              <div style={{ 
-                width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#f1f5f9',
+              <div style={{
+                width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'var(--color-bg)',
                 overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '0.75rem', fontWeight: 800, border: '1.5px solid white',
+                fontSize: '0.75rem', fontWeight: 800, border: '1.5px solid var(--color-surface)',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)', flexShrink: 0
               }}>
-                <img 
-                  src={prompt.author?.avatar || `https://ui-avatars.com/api/?name=${prompt.author?.name || 'User'}&background=random&color=fff`} 
-                  alt={prompt.author?.name} 
+                <img
+                  src={prompt.author?.avatar || `https://ui-avatars.com/api/?name=${prompt.author?.name || 'User'}&background=random&color=fff`}
+                  alt={prompt.author?.name}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
@@ -131,60 +150,60 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
             </div>
 
             <h3 className="card-title">{prompt.title}</h3>
-            
+
             <p className="card-desc" style={{ marginBottom: '24px', opacity: 0.8 }}>
               {stripMarkdown(prompt.description)}
             </p>
           </Link>
 
-          <footer style={{ 
+          <footer style={{
             marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--color-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between'
           }}>
-             <div className="flex-row" style={{ gap: '16px' }}>
-                <button 
-                  onClick={handleLike} 
-                  className="flex-row" 
-                  style={{ 
-                    background: 'none', border: 'none', gap: '4px', cursor: 'pointer', 
-                    fontSize: '0.85rem', fontWeight: 700, 
-                    color: isLiked ? '#ef4444' : 'var(--color-text-secondary)',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} /> {likes > 1000 ? `${(likes/1000).toFixed(1)}k` : likes}
-                </button>
-                <button onClick={handleShare} className="flex-row" style={{ background: 'none', border: 'none', gap: '4px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
-                  <Share2 size={16} /> Share
-                </button>
-                <button 
-                  onClick={handleSave} 
-                  style={{ 
-                    background: 'none', border: 'none', cursor: 'pointer', 
-                    color: isSaved ? '#000000' : 'var(--color-text-secondary)', 
-                    display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '0.85rem',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                   <Bookmark size={18} fill={isSaved ? 'currentColor' : 'none'} /> {isSaved ? 'Saved' : 'Save'}
-                </button>
-             </div>
+            <div className="flex-row" style={{ gap: '16px' }}>
+              <button
+                onClick={handleLike}
+                className="flex-row"
+                style={{
+                  background: 'none', border: 'none', gap: '4px', cursor: 'pointer',
+                  fontSize: '0.85rem', fontWeight: 700,
+                  color: isLiked ? '#ef4444' : 'var(--color-text-secondary)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} /> {likes > 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}
+              </button>
+              <button onClick={handleShare} className="flex-row" style={{ background: 'none', border: 'none', gap: '4px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
+                <Share2 size={16} /> Share
+              </button>
+              <button
+                onClick={handleSave}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: isSaved ? '#000000' : 'var(--color-text-secondary)',
+                  display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '0.85rem',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <Bookmark size={18} fill={isSaved ? 'currentColor' : 'none'} /> {isSaved ? 'Saved' : 'Save'}
+              </button>
+            </div>
 
-             <div className="flex-row">
-                <Link href={`/prompts/${prompt._id}`} className="flex-row" style={{ 
-                  color: 'var(--color-primary)', fontWeight: 800, fontSize: '0.85rem', textDecoration: 'none', gap: '4px'
-                }}>
-                  View Prompt <ArrowRight size={16} />
-                </Link>
-             </div>
+            <div className="flex-row">
+              <Link href={`/prompts/${prompt._id}`} className="flex-row" style={{
+                color: 'var(--color-primary)', fontWeight: 800, fontSize: '0.85rem', textDecoration: 'none', gap: '4px'
+              }}>
+                View Prompt <ArrowRight size={16} />
+              </Link>
+            </div>
           </footer>
         </div>
       </div>
 
-      <CommentDrawer 
-        isOpen={isDrawerOpen} 
-        onClose={() => setIsDrawerOpen(false)} 
-        promptId={prompt._id} 
+      <CommentDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        promptId={prompt._id}
       />
     </>
   );

@@ -25,11 +25,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className={styles.adminLayout}>
       <header className={styles.mobileHeader}>
-        <div style={{ fontWeight: 900, fontSize: '1rem', letterSpacing: '-0.02em' }}>
-          COMMAND <span style={{ color: 'var(--color-primary)' }}>CENTER</span>
+        <div style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.05em', color: 'var(--color-admin-text)' }}>
+          COMMAND <span style={{ color: 'var(--color-admin-accent)' }}>CENTER</span>
         </div>
         <button className={styles.hamburger} onClick={() => setIsSidebarOpen(true)}>
-          <Menu size={24} color="#0f172a" />
+          <Menu size={24} color="var(--color-admin-text)" />
         </button>
       </header>
       

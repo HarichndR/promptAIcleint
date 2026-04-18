@@ -17,8 +17,9 @@ export const MobileBottomNav = () => {
     }
   };
 
-  // Hide only for admins (they have a specific admin dashboard layout)
-  if (isAdmin) return null;
+  // Hide on auth pages and for admins
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+  if (isAdmin || isAuthPage) return null;
 
   return (
     <nav className="mobile-bottom-nav">
@@ -34,7 +35,7 @@ export const MobileBottomNav = () => {
           className={`mobile-nav-item ${pathname === '/my-prompts' ? 'active' : ''}`}
         >
           <PenTool size={20} />
-          <span> MyPrompts</span>
+          <span>My Prompts</span>
         </Link>
 
         <Link

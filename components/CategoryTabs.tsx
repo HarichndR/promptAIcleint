@@ -25,26 +25,28 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
     : categories;
 
   return (
-    <div className="category-scroller">
-      <button
-        className={`category-btn ${activeCategory === null ? 'active' : ''}`}
-        onClick={() => onSelect(null)}
-      >
-        {userInterests.length > 0 ? '✦ For You' : 'All Prompts'}
-      </button>
-      {sortedCategories.map((cat) => {
-        const isInterest = userInterests.includes(cat._id);
-        return (
-          <button
-            key={cat._id}
-            className={`category-btn ${activeCategory === cat._id ? 'active' : ''}`}
-            onClick={() => onSelect(cat._id)}
-            style={isInterest && activeCategory !== cat._id ? { borderColor: 'rgba(37,99,235,0.3)', color: 'var(--color-primary)' } : {}}
-          >
-            {cat.name}
-          </button>
-        );
-      })}
+    <div className="category-scroller-wrapper">
+      <div className="category-scroller">
+        <button
+          className={`category-btn ${activeCategory === null ? 'active' : ''}`}
+          onClick={() => onSelect(null)}
+        >
+          {userInterests.length > 0 ? '✦ For You' : 'All Prompts'}
+        </button>
+        {sortedCategories.map((cat) => {
+          const isInterest = userInterests.includes(cat._id);
+          return (
+            <button
+              key={cat._id}
+              className={`category-btn ${activeCategory === cat._id ? 'active' : ''}`}
+              onClick={() => onSelect(cat._id)}
+              style={isInterest && activeCategory !== cat._id ? { borderColor: 'rgba(37,99,235,0.3)', color: 'var(--color-primary)' } : {}}
+            >
+              {cat.name}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

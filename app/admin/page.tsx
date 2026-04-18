@@ -61,16 +61,16 @@ export default function AdminHomePage() {
       <header className={styles.dashboardHeader}>
         <div className="flex-between">
           <div>
-            <h1>Command <span style={{ color: 'var(--color-primary)' }}>Center</span></h1>
-            <p style={{ color: '#64748b' }}>Platform metrics and automated system oversight.</p>
+            <h1 style={{ color: 'var(--color-admin-text)' }}>COMMAND <span style={{ color: 'var(--color-admin-accent)' }}>CENTER</span></h1>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Platform metrics and automated system oversight.</p>
           </div>
           <div style={{ textAlign: 'right' }} className="md-hidden">
-            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              System Status
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-admin-accent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              SYSTEM STATUS
             </div>
             <div className="flex-row" style={{ gap: '8px', marginTop: '4px', justifyContent: 'flex-end' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 8px #10b981' }}></div>
-              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Operational</span>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 12px #10b981' }}></div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-admin-text)' }}>Operational</span>
             </div>
           </div>
         </div>
@@ -86,12 +86,12 @@ export default function AdminHomePage() {
           <div key={i} className={styles.statCard} style={{ borderTop: `4px solid ${stat.color}` }}>
             <div className="flex-between" style={{ marginBottom: '16px' }}>
               <span style={{ fontSize: '1.25rem' }}>{stat.icon}</span>
-              <div style={{ fontSize: '0.65rem', color: stat.color, fontWeight: 800, textTransform: 'uppercase' }}>
-                Live Metric
+              <div style={{ fontSize: '0.65rem', color: stat.color, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                SYSTEM LIVE
               </div>
             </div>
-            <h4 style={{ color: '#64748b', fontSize: '0.875rem', fontWeight: 500 }}>{stat.label}</h4>
-            <span style={{ fontSize: '1.75rem', fontWeight: 700, color: '#0f172a' }}>{stat.value}</span>
+            <h4 style={{ color: 'var(--color-text-secondary)', fontSize: '0.75rem', fontWeight: 700 }}>{stat.label}</h4>
+            <span style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--color-admin-text)', letterSpacing: '-0.03em' }}>{stat.value}</span>
           </div>
         ))}
       </div>
@@ -99,15 +99,15 @@ export default function AdminHomePage() {
       <div className={styles.dashboardGrid}>
         <section className={styles.pendingSection}>
           <div className="flex-between" style={{ marginBottom: 'var(--space-8)' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.125rem' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.125rem', color: 'var(--color-admin-text)' }}>
               Approval Queue
-              <span style={{ fontSize: '0.75rem', background: '#fee2e2', color: '#ef4444', padding: '2px 10px', borderRadius: '20px', fontWeight: 800 }}>
+              <span style={{ fontSize: '0.75rem', background: 'var(--color-error-soft)', color: 'var(--color-error)', padding: '2px 10px', borderRadius: '20px', fontWeight: 800 }}>
                 {pendingPrompts.length} Needed
               </span>
             </h3>
             <button 
               onClick={fetchData} 
-              style={{ background: 'transparent', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}
+              style={{ background: 'transparent', border: '1px solid var(--color-admin-border)', borderRadius: '8px', padding: '6px 12px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600, color: 'var(--color-admin-text)' }}
             >
               Sync
             </button>
@@ -116,25 +116,25 @@ export default function AdminHomePage() {
           {pendingPrompts.length === 0 ? (
             <div style={{ padding: '60px 40px', textAlign: 'center' }}>
               <div style={{ fontSize: '3rem', marginBottom: '16px' }}>☕</div>
-              <p style={{ fontWeight: 600, color: '#64748b' }}>Queue is clean.</p>
+              <p style={{ fontWeight: 600, color: 'var(--color-text-secondary)' }}>Queue is clean.</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {pendingPrompts.slice(0, 5).map(prompt => (
-                <div key={prompt._id} className={styles.itemCard} style={{ padding: '16px' }}>
+                <div key={prompt._id} className={styles.itemCard}>
                   <div className={styles.itemInfo}>
-                    <h5 style={{ fontSize: '1rem', marginBottom: '4px' }}>{prompt.title}</h5>
+                    <h5 style={{ fontSize: '1rem', marginBottom: '4px', color: 'var(--color-admin-text)' }}>{prompt.title}</h5>
                     <div className={styles.itemMeta}>
-                      <span>{prompt.author?.name}</span>
-                      <span>•</span>
-                      <span>{prompt.category?.name}</span>
+                      <span style={{ color: 'var(--color-text-secondary)' }}>{prompt.author?.name}</span>
+                      <span style={{ color: 'var(--color-text-secondary)' }}>•</span>
+                      <span style={{ color: 'var(--color-text-secondary)' }}>{prompt.category?.name}</span>
                     </div>
                   </div>
                   <div className={styles.actions}>
                     <button 
                       className={`${styles.actionBtn} ${styles.approveBtn}`}
                       onClick={() => handleAction(prompt._id, 'approve')}
-                      style={{ padding: '6px 12px' }}
+                      style={{ padding: '8px 16px' }}
                     >
                       Approve
                     </button>
@@ -143,8 +143,8 @@ export default function AdminHomePage() {
               ))}
               {pendingPrompts.length > 5 && (
                 <div style={{ textAlign: 'center', marginTop: 'var(--space-4)' }}>
-                  <Link href='/admin/prompts?status=pending' style={{ fontSize: '0.8125rem', color: 'var(--color-primary)', fontWeight: 600, textDecoration: 'none' }}>
-                    View Remaining {pendingPrompts.length - 5} Items →
+                  <Link href='/admin/prompts?status=pending' style={{ fontSize: '0.8125rem', color: 'var(--color-admin-accent)', fontWeight: 800, textDecoration: 'none', letterSpacing: '0.02em' }}>
+                    Access Full Queue {pendingPrompts.length - 5} Items →
                   </Link>
                 </div>
               )}
@@ -152,7 +152,7 @@ export default function AdminHomePage() {
           )}
         </section>
 
-        <section className={styles.pendingSection} style={{ backgroundColor: '#0f172a', color: 'white' }}>
+        <section className={styles.pendingSection} style={{ background: 'var(--color-admin-nav-bg)', color: 'white' }}>
           <h3 style={{ fontSize: '1.125rem' }}>System Performance</h3>
           <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: 'var(--space-8)' }}>Latency and throughput monitoring.</p>
           
@@ -164,17 +164,17 @@ export default function AdminHomePage() {
             ].map((p, i) => (
               <div key={i}>
                 <div className="flex-between" style={{ marginBottom: '8px', fontSize: '0.75rem' }}>
-                  <span style={{ color: '#94a3b8' }}>{p.label}</span>
-                  <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>{p.val}</span>
+                   <span style={{ color: '#94a3b8' }}>{p.label}</span>
+                   <span style={{ color: 'var(--color-admin-accent)', fontWeight: 700 }}>{p.val}</span>
                 </div>
-                <div style={{ height: '4px', background: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${p.score}%`, background: 'var(--color-primary)' }}></div>
+                <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${p.score}%`, background: 'var(--color-admin-accent)' }}></div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ marginTop: 'var(--space-12)', padding: 'var(--space-6)', background: 'rgba(255,255,255,0.05)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ marginTop: 'var(--space-12)', padding: 'var(--space-6)', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
              <h4 style={{ fontSize: '0.8125rem', marginBottom: '4px' }}>Audit Log Ready</h4>
              <p style={{ fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.5 }}>Unauthorized access attempts will trigger an immediate identity lockout.</p>
           </div>

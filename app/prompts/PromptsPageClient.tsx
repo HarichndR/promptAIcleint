@@ -62,7 +62,7 @@ export default function PromptsPageClient() {
         </p>
       </section>
 
-      <div style={{ position: 'sticky', top: '76px', zIndex: 900, backgroundColor: 'rgba(252, 252, 253, 0.95)', backdropFilter: 'blur(8px)', padding: 'var(--space-4) 0', borderBottom: '1px solid var(--color-border)' }}>
+      <div className="sticky-tabs-container">
          <div className="site-container">
             <CategoryTabs
               categories={categories}

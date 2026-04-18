@@ -4,9 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '../types';
 import { categoryApi, promptApi } from '../services/api';
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
-import { Textarea } from './ui/Textarea';
 import { MarkdownRenderer } from './MarkdownRenderer';
 
 export const PromptForm: React.FC = () => {
@@ -21,7 +18,6 @@ export const PromptForm: React.FC = () => {
   });
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isPreview, setIsPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,10 +35,8 @@ export const PromptForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In testing/development, allow submission without image if needed for unblocking
     if (!image) {
       setError('Please upload a result screenshot for your prompt.');
-      setIsLoading(false);
       return;
     }
 
@@ -59,8 +53,8 @@ export const PromptForm: React.FC = () => {
 
     try {
       const res = await promptApi.createPrompt(data);
-      if (res.success) {
-        router.push('/my-prompts');
+      if (res.success && res.data) {
+        router.push(`/prompts/${res.data._id}`);
       } else {
         setError(res.message);
       }
@@ -72,10 +66,11 @@ export const PromptForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="animate-reveal">
+    <form onSubmit={handleSubmit} className="reveal-up">
       <div className="form-group">
         <label className="form-label">Descriptive Title</label>
-        <Input
+        <input
+          className="form-input"
           placeholder="e.g., SEO Article Generator with Keyphrase Optimization"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -85,7 +80,8 @@ export const PromptForm: React.FC = () => {
 
       <div className="form-group">
         <label className="form-label">AI Model</label>
-        <Input
+        <input
+          className="form-input"
           placeholder="e.g., Midjourney v6, GPT-4, Stable Diffusion XL"
           value={formData.model}
           onChange={(e) => setFormData({ ...formData, model: e.target.value })}
@@ -111,7 +107,7 @@ export const PromptForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="form-label">Result </label>
+          <label className="form-label">Result Preview</label>
           <div style={{ position: 'relative' }}>
             <input
               type="file"
@@ -132,13 +128,13 @@ export const PromptForm: React.FC = () => {
       <div className="form-group">
         <label className="form-label">Description & Usage (Markdown Preview)</label>
         <div className="grid-2 mobile-grid-1" style={{ display: 'grid', gap: 'var(--space-4)' }}>
-          <Textarea
-            placeholder="Explain how to use this prompt, what parameters to change, and what output to expect..."
+          <textarea
+            className="form-textarea"
+            placeholder="Explain how to use this prompt..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={12}
             required
-            className="form-textarea"
           />
           <div style={{
             padding: 'var(--space-6)',
@@ -156,13 +152,13 @@ export const PromptForm: React.FC = () => {
       </div>
 
       <div className="form-group">
-        <label className="form-label">Final Prompt Text (Copying this should work perfectly)</label>
-        <Textarea
+        <label className="form-label">Final Prompt Text</label>
+        <textarea
+          className="form-textarea prompt-notepad-font"
           placeholder="Paste the exact text here..."
           value={formData.promptText}
           onChange={(e) => setFormData({ ...formData, promptText: e.target.value })}
           rows={18}
-          className="form-textarea prompt-notepad-font"
           required
         />
       </div>
@@ -173,9 +169,9 @@ export const PromptForm: React.FC = () => {
         </p>
       )}
 
-      <Button type="submit" isLoading={isLoading} size="lg" style={{ width: '100%' }}>
-        Share with Community
-      </Button>
+      <button type="submit" disabled={isLoading} className="btn-base btn-primary btn-lg" style={{ width: '100%' }}>
+        {isLoading ? 'Processing...' : 'Share with Community'}
+      </button>
     </form>
   );
 };

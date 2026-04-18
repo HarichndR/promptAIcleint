@@ -9,14 +9,16 @@ import { useRouter } from 'next/navigation';
 export default function RegisterPage() {
   const { user, loading } = useAuthContext();
   const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (!loading && user) {
       router.push('/');
     }
   }, [user, loading, router]);
 
-  if (loading || user) {
+  if (!mounted || loading || user) {
     return (
       <div className="flex-center" style={{ height: '80vh' }}>
         <div className="loader"></div>
@@ -39,7 +41,7 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <div className="cleanup-border" style={{ padding: '40px', backgroundColor: '#fff', borderRadius: '24px', boxShadow: 'var(--shadow-lg)' }}>
+        <div className="cleanup-border" style={{ padding: '40px', backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '24px', boxShadow: 'var(--shadow-lg)' }}>
           <RegisterForm />
         </div>
 

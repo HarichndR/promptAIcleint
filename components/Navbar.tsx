@@ -12,12 +12,14 @@ export const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
+
   const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Sync internal state with URL params
   useEffect(() => {
+    setMounted(true);
     setSearchValue(searchParams.get('search') || '');
   }, [searchParams]);
 
@@ -34,27 +36,34 @@ export const Navbar = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleClear = () => {
+    setSearchValue('');
+    if (pathname === '/') {
+      router.push('/');
+    }
+  };
+
   return (
     <nav className="site-nav">
       <div className="site-container" style={{ height: '100%', width: '100%' }}>
         <div className="flex-between" style={{ height: '100%' }}>
           {/* MOBILE SEARCH OVERLAY */}
           {isMobileSearchOpen && (
-            <div style={{ 
+            <div style={{
               position: 'absolute', inset: 0, backgroundColor: 'white', zIndex: 1100,
               display: 'flex', alignItems: 'center', padding: '0 var(--space-4)'
             }}>
               <Search size={18} color="var(--color-primary)" style={{ marginRight: '12px' }} />
-              <input 
+              <input
                 autoFocus
-                type="text" 
-                placeholder="Search prompts..." 
-                className="nav-search-input" 
+                type="text"
+                placeholder="Search prompts..."
+                className="nav-search-input"
                 value={searchValue}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none' }}
               />
-              <button 
+              <button
                 onClick={() => setIsMobileSearchOpen(false)}
                 style={{ background: 'none', border: 'none', color: 'var(--color-text-secondary)', marginLeft: '12px' }}
               >
@@ -64,7 +73,7 @@ export const Navbar = () => {
           )}
 
           {/* LOGO */}
-          <Link href="/" className="nav-logo" style={{ fontSize: '1.25rem', margin: 0 }}>
+          <Link href="/" className="nav-logo" style={{ fontSize: '1.25rem', margin: 0 }} onClick={handleClear}>
             Prompt <span style={{ color: 'var(--color-primary)' }}>AI</span>
           </Link>
 
@@ -74,16 +83,16 @@ export const Navbar = () => {
               <>
                 <div className="nav-search-container hide-mobile" style={{ maxWidth: '300px', width: '100%' }}>
                   <Search size={16} className="search-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="Search..." 
-                    className="nav-search-input" 
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="nav-search-input"
                     value={searchValue}
                     onChange={(e) => handleSearchChange(e.target.value)}
                   />
                 </div>
                 {/* Mobile Search Trigger */}
-                <button 
+                <button
                   className="md-hidden"
                   onClick={() => setIsMobileSearchOpen(true)}
                   style={{ background: 'var(--color-bg)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -92,13 +101,13 @@ export const Navbar = () => {
                 </button>
               </>
             )}
-            
+
             <div className="flex-row hide-mobile" style={{ marginLeft: showSearch ? '20px' : '0', gap: '8px' }}>
-              <Link href="/" className="nav-link">Home</Link>
+              <Link href="/" className="nav-link" onClick={handleClear}>Home</Link>
               <Link href="/guide" className="nav-link">Guide</Link>
-              {user && (
+              {mounted && user && (
                 <>
-                  <Link href="/collections" className="nav-link">My Collection</Link>
+                  <Link href="/collections" className="nav-link">Saved</Link>
                   <Link href="/my-prompts" className="nav-link">My Prompts</Link>
                 </>
               )}
@@ -107,10 +116,10 @@ export const Navbar = () => {
 
           {/* USER ACTIONS */}
           <div className="flex-row" style={{ gap: 'var(--space-4)' }}>
-            {!user ? (
+            {mounted && !user ? (
               <div className="flex-row" style={{ gap: 'var(--space-3)' }}>
                 <Link href="/login" className="nav-link hide-mobile" style={{ fontSize: '0.85rem' }}>Login</Link>
-                <Link 
+                <Link
                   href="/register"
                   className="btn-base btn-primary btn-sm"
                   style={{ height: '36px', padding: '0 16px', borderRadius: '8px', fontSize: '0.8rem' }}
@@ -118,16 +127,16 @@ export const Navbar = () => {
                   Join
                 </Link>
               </div>
-            ) : (
+            ) : mounted && user ? (
               <div className="flex-row" style={{ gap: 'var(--space-4)' }}>
-                 <NotificationBell />
-                 <Link href="/profile" className="flex-center" style={{ 
-                    width: '34px', height: '34px', borderRadius: '50%', overflow: 'hidden', border: '1.5px solid var(--color-border)'
-                 }}>
-                    {user.avatar ? <img src={user.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name.charAt(0)}
-                 </Link>
+                <NotificationBell />
+                <Link href="/profile" className="flex-center" style={{
+                  width: '34px', height: '34px', borderRadius: '50%', overflow: 'hidden', border: '1.5px solid var(--color-border)'
+                }}>
+                  {user.avatar ? <img src={user.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name.charAt(0)}
+                </Link>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

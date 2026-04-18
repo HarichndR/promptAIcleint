@@ -92,8 +92,8 @@ export default function AdminCategoriesPage() {
       <header className={styles.dashboardHeader}>
         <div className="flex-between">
           <div>
-            <h1>Taxonomy <span style={{ color: 'var(--color-primary)' }}>Engine</span></h1>
-            <p>Organize the platform's architectural ecosystem.</p>
+            <h1>Taxonomy <span style={{ color: 'var(--color-admin-accent)' }}>Engine</span></h1>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Organize the platform's architectural ecosystem.</p>
           </div>
           <button className={styles.fabBtn} style={{ margin: 0 }} onClick={() => setIsCreating(true)}>
             <Plus size={18} /> Category
@@ -101,106 +101,122 @@ export default function AdminCategoriesPage() {
         </div>
       </header>
 
-      <div className={styles.pendingSection}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
-          
-          {/* Creating Card overlay */}
-          {isCreating && (
-            <div className={styles.itemCard} style={{ padding: '20px', alignItems: 'center', borderColor: 'var(--color-primary)' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
-                 <div style={{ backgroundColor: 'var(--color-primary-soft)', padding: '10px', borderRadius: '12px' }}>
-                    <Tag size={20} color="var(--color-primary)" />
-                 </div>
-                 <input 
-                   autoFocus
-                   type="text" 
-                   value={newName} 
-                   onChange={(e) => setNewName(e.target.value)}
-                   onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-                   placeholder="New Category..." 
-                   style={{ width: '100%', padding: '8px', border: '1px solid var(--color-border)', borderRadius: '6px' }}
-                 />
-               </div>
-               <div className="flex-row" style={{ gap: '8px', marginLeft: '12px' }}>
-                 <button onClick={handleCreate} disabled={isSaving || !newName.trim()} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}>
-                   {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-                 </button>
-                 <button onClick={() => setIsCreating(false)} style={{ background: 'transparent', border: '1px solid #e2e8f0', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}>
-                   <X size={16} color="#64748b" />
-                 </button>
-               </div>
-            </div>
-          )}
-
-          {categories.map(cat => (
-            <div key={cat._id} className={styles.itemCard} style={{ padding: '20px', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
-                <div style={{ backgroundColor: 'var(--color-primary-soft)', padding: '10px', borderRadius: '12px' }}>
-                  <Tag size={20} color="var(--color-primary)" />
-                </div>
-                
-                {editingId === cat._id ? (
-                  <input 
-                    autoFocus
-                    type="text" 
-                    value={editName} 
-                    onChange={(e) => setEditName(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleUpdate(cat._id)}
-                    style={{ width: '100%', padding: '8px', border: '1px solid var(--color-primary)', borderRadius: '6px' }}
-                  />
-                ) : (
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '1.125rem' }}>{cat.name}</h4>
-                    <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: '#64748b' }}>System Identified</p>
+      <div style={{ backgroundColor: 'var(--color-admin-surface)', borderRadius: '24px', border: '1px solid var(--color-admin-border)', overflowX: 'auto', boxShadow: 'var(--shadow-sm)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+          <thead>
+            <tr style={{ textAlign: 'left', backgroundColor: 'var(--color-admin-pill)', borderBottom: '1px solid var(--color-admin-border)' }}>
+              <th style={{ padding: '20px 24px', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '0.1em' }}>Category Name</th>
+              <th style={{ padding: '20px 24px', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '0.1em' }}>Identifier</th>
+              <th style={{ padding: '20px 24px', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '0.1em' }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* New Category Input Row */}
+            {isCreating && (
+              <tr style={{ borderBottom: '1px solid var(--color-admin-border)', backgroundColor: 'rgba(99, 102, 241, 0.05)' }}>
+                <td style={{ padding: '16px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ backgroundColor: 'var(--color-admin-accent-glow)', padding: '8px', borderRadius: '8px' }}>
+                      <Tag size={16} color="var(--color-admin-accent)" />
+                    </div>
+                    <input 
+                      autoFocus
+                      type="text" 
+                      value={newName} 
+                      onChange={(e) => setNewName(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                      placeholder="New name..." 
+                      style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--color-admin-accent)', borderRadius: '8px', backgroundColor: 'var(--color-admin-surface)', color: 'var(--color-admin-text)', fontSize: '0.875rem' }}
+                    />
                   </div>
-                )}
-              </div>
-              
-              <div className="flex-row" style={{ gap: '8px', marginLeft: '12px' }}>
-                {editingId === cat._id ? (
-                  <>
-                    <button 
-                      onClick={() => handleUpdate(cat._id)} disabled={isSaving || !editName.trim()}
-                      style={{ background: 'var(--color-success)', color: 'white', border: 'none', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}
-                    >
-                      {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                </td>
+                <td style={{ padding: '16px 24px', color: 'var(--color-admin-accent)', fontWeight: 700, fontSize: '0.75rem' }}>DRAFTING...</td>
+                <td style={{ padding: '16px 24px' }}>
+                  <div className="flex-row" style={{ gap: '8px' }}>
+                    <button onClick={handleCreate} disabled={isSaving || !newName.trim()} className={styles.actionBtn} style={{ background: 'var(--color-primary)', color: 'white' }}>
+                      {isSaving ? <Loader2 className="animate-spin" size={14} /> : 'Save'}
                     </button>
-                    <button onClick={() => setEditingId(null)} style={{ background: 'transparent', border: '1px solid #e2e8f0', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}>
-                      <X size={16} color="#64748b" />
+                    <button onClick={() => setIsCreating(false)} className={styles.actionBtn} style={{ background: 'transparent' }}>
+                      Cancel
                     </button>
-                  </>
-                ) : (
-                  <>
-                    <button 
-                      style={{ background: 'transparent', border: '1px solid #e2e8f0', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}
-                      onClick={() => {
-                        setEditingId(cat._id);
-                        setEditName(cat.name);
-                      }}
-                    >
-                      <Edit2 size={16} color="#64748b" />
-                    </button>
-                    <button 
-                      style={{ background: 'transparent', border: '1px solid #fee2e2', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}
-                      onClick={() => handleDelete(cat._id)}
-                      disabled={isDeleting === cat._id}
-                    >
-                      {isDeleting === cat._id ? <Loader2 className="animate-spin" size={16} /> : <Trash2 size={16} color="#ef4444" />}
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-        
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {categories.map(cat => (
+              <tr key={cat._id} style={{ borderBottom: '1px solid var(--color-admin-border)', transition: 'background 0.2s' }}>
+                <td style={{ padding: '16px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ backgroundColor: 'rgba(99, 102, 241, 0.1)', padding: '8px', borderRadius: '8px' }}>
+                      <Tag size={16} color="var(--color-admin-accent)" />
+                    </div>
+                    {editingId === cat._id ? (
+                      <input 
+                        autoFocus
+                        type="text" 
+                        value={editName} 
+                        onChange={(e) => setEditName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleUpdate(cat._id)}
+                        style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--color-admin-accent)', borderRadius: '8px', backgroundColor: 'var(--color-admin-surface)', color: 'var(--color-admin-text)', fontSize: '0.875rem' }}
+                      />
+                    ) : (
+                      <span style={{ fontWeight: 800, color: 'var(--color-admin-text)' }}>{cat.name}</span>
+                    )}
+                  </div>
+                </td>
+                <td style={{ padding: '16px 24px', color: 'var(--color-text-secondary)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                  {cat._id.slice(-8).toUpperCase()}
+                </td>
+                <td style={{ padding: '16px 24px' }}>
+                  <div className="flex-row" style={{ gap: '8px' }}>
+                    {editingId === cat._id ? (
+                      <>
+                        <button 
+                          onClick={() => handleUpdate(cat._id)} disabled={isSaving || !editName.trim()}
+                          className={styles.actionBtn} style={{ background: 'var(--color-success)', color: 'white' }}
+                        >
+                          {isSaving ? <Loader2 className="animate-spin" size={14} /> : 'Update'}
+                        </button>
+                        <button onClick={() => setEditingId(null)} className={styles.actionBtn} style={{ background: 'transparent' }}>
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          className={styles.actionBtn}
+                          style={{ background: 'transparent' }}
+                          onClick={() => {
+                            setEditingId(cat._id);
+                            setEditName(cat.name);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className={styles.actionBtn}
+                          style={{ background: 'transparent', color: '#ef4444' }}
+                          onClick={() => handleDelete(cat._id)}
+                          disabled={isDeleting === cat._id}
+                        >
+                          {isDeleting === cat._id ? <Loader2 className="animate-spin" size={14} /> : 'Delete'}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
         {categories.length === 0 && !isCreating && (
           <div style={{ padding: '60px', textAlign: 'center' }}>
-            <p style={{ color: '#64748b' }}>No categories found in registry.</p>
+            <p style={{ color: 'var(--color-text-secondary)' }}>No categories found in registry.</p>
           </div>
         )}
       </div>
     </div>
   );
 }
-

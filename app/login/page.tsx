@@ -11,8 +11,10 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
+  const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (!loading && user) {
       const target = user.role === 'admin' ? '/admin' : '/';
       router.push(target);
@@ -20,7 +22,8 @@ export default function LoginPage() {
   }, [user, loading, router]);
 
 
-  if (loading || user) {
+  // Prevent hydration mismatch by waiting for mount
+  if (!mounted || loading || user) {
     return (
       <div className="flex-center" style={{ height: '80vh' }}>
         <div className="loader"></div>
@@ -60,7 +63,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <div className="cleanup-border" style={{ padding: '40px', backgroundColor: '#fff', borderRadius: '24px', boxShadow: 'var(--shadow-lg)' }}>
+        <div className="cleanup-border" style={{ padding: '40px', backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '24px', boxShadow: 'var(--shadow-lg)' }}>
           <LoginForm />
         </div>
 

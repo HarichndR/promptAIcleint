@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> { }
 
 export const Textarea: React.FC<TextareaProps> = ({ className = '', ...props }) => {
   return (
-    <textarea 
-      className={`form-textarea ${className}`} 
-      {...props} 
+    <textarea
+      className={`form-textarea ${className}`}
+      {...props}
     />
   );
 };
