@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Sparkles, 
-  FolderTree, 
-  Users, 
+  PenTool,
+  Bookmark,
   UserCircle, 
   ShieldCheck,
   X,
@@ -20,9 +20,9 @@ import { useAuth } from '@/hooks/useAuth';
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
   { label: 'Prompts', icon: Sparkles, href: '/admin/prompts' },
-  { label: 'Categories', icon: FolderTree, href: '/admin/categories' },
-  { label: 'User Base', icon: Users, href: '/admin/users' },
-  { label: 'Identity', icon: UserCircle, href: '/admin/profile' },
+  { label: 'My Prompts', icon: PenTool, href: '/my-prompts' },
+  { label: 'My Collection', icon: Bookmark, href: '/admin/collections' },
+  { label: 'Profile', icon: UserCircle, href: '/admin/profile' },
 ];
 
 

@@ -9,7 +9,7 @@ import { categoryApi } from '@/services/api';
 import { Category } from '@/types';
 import { useAuthContext } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import { PenTool } from 'lucide-react';
+import { StickyAddButton } from '@/components/ui/StickyAddButton';
 
 export default function PromptsPageClient() {
   const router = useRouter();
@@ -47,7 +47,9 @@ export default function PromptsPageClient() {
   };
 
   return (
-    <div className="animate-reveal">
+    <React.Fragment>
+      <StickyAddButton />
+      <div className="animate-reveal">
       {/* 1. CURATOR HERO */}
       <section className="curator-hero site-container">
         <h1>
@@ -69,8 +71,6 @@ export default function PromptsPageClient() {
             />
          </div>
       </div>
-
-      {user && <StickyPostButton />}
 
       {/* 3. GRID FEED */}
       <section className="site-container" style={{ padding: 'var(--space-12) 0 var(--space-20)' }}>
@@ -121,26 +121,7 @@ export default function PromptsPageClient() {
         )}
       </section>
     </div>
+    </React.Fragment>
   );
 }
 
-function StickyPostButton() {
-  const router = useRouter();
-  return (
-    <button 
-      onClick={() => router.push('/prompts/create')}
-      className="btn-base btn-primary flex-center"
-      style={{
-        position: 'fixed', 
-        bottom: '84px', // Adjusted to sit above MobileBottomNav (64px + 20px)
-        right: '24px',
-        width: '56px', height: '56px', borderRadius: '50%',
-        boxShadow: '0 12px 32px rgba(37, 99, 235, 0.4)',
-        zIndex: 2000, padding: 0, minWidth: 'auto'
-      }}
-      title="Post New Prompt"
-    >
-      <PenTool size={22} />
-    </button>
-  );
-}

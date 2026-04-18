@@ -16,6 +16,12 @@ interface PromptCardProps {
 export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
   const { requireAuth } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
+  // Interaction State
+  const [likes, setLikes] = useState(prompt.likes || 0);
+  const [isLiked, setIsLiked] = useState(prompt.isLiked || false);
+  const [isSaved, setIsSaved] = useState(prompt.isSaved || false);
+  const [interactionLoading, setInteractionLoading] = useState(false);
 
   // Helper to strip markdown for preview
   const stripMarkdown = (text: string) => {
@@ -30,7 +36,20 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
     e.preventDefault();
     e.stopPropagation();
     requireAuth(async () => {
-      await promptApi.toggleLike(prompt._id);
+      // Optimistic update
+      const prevIsLiked = isLiked;
+      const prevLikes = likes;
+      setIsLiked(!prevIsLiked);
+      setLikes(prevIsLiked ? prevLikes - 1 : prevLikes + 1);
+      
+      try {
+        const { data } = await promptApi.toggleLike(prompt._id);
+        setLikes(data.likes);
+      } catch (err) {
+        // Revert on error
+        setIsLiked(prevIsLiked);
+        setLikes(prevLikes);
+      }
     });
   };
 
@@ -38,7 +57,16 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
     e.preventDefault();
     e.stopPropagation();
     requireAuth(async () => {
-      await promptApi.toggleSave(prompt._id);
+      // Optimistic update
+      const prevIsSaved = isSaved;
+      setIsSaved(!prevIsSaved);
+      
+      try {
+        await promptApi.toggleSave(prompt._id);
+      } catch (err) {
+        // Revert on error
+        setIsSaved(prevIsSaved);
+      }
     });
   };
 
@@ -114,14 +142,31 @@ export const PromptCard: React.FC<PromptCardProps> = ({ prompt }) => {
             display: 'flex', alignItems: 'center', justifyContent: 'space-between'
           }}>
              <div className="flex-row" style={{ gap: '16px' }}>
-                <button onClick={handleLike} className="flex-row" style={{ background: 'none', border: 'none', gap: '4px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
-                  <Heart size={16} /> {(prompt.likes || 0) > 1000 ? `${(prompt.likes/1000).toFixed(1)}k` : prompt.likes}
+                <button 
+                  onClick={handleLike} 
+                  className="flex-row" 
+                  style={{ 
+                    background: 'none', border: 'none', gap: '4px', cursor: 'pointer', 
+                    fontSize: '0.85rem', fontWeight: 700, 
+                    color: isLiked ? '#ef4444' : 'var(--color-text-secondary)',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} /> {likes > 1000 ? `${(likes/1000).toFixed(1)}k` : likes}
                 </button>
                 <button onClick={handleShare} className="flex-row" style={{ background: 'none', border: 'none', gap: '4px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
                   <Share2 size={16} /> Share
                 </button>
-                <button onClick={handleSave} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-secondary)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '0.85rem' }}>
-                   <Bookmark size={18} /> Save
+                <button 
+                  onClick={handleSave} 
+                  style={{ 
+                    background: 'none', border: 'none', cursor: 'pointer', 
+                    color: isSaved ? '#000000' : 'var(--color-text-secondary)', 
+                    display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '0.85rem',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                   <Bookmark size={18} fill={isSaved ? 'currentColor' : 'none'} /> {isSaved ? 'Saved' : 'Save'}
                 </button>
              </div>
 

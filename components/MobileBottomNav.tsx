@@ -28,13 +28,17 @@ export const MobileBottomNav = () => {
           <span>Home</span>
         </Link>
 
-        <Link href="/prompts" className={`mobile-nav-item ${(pathname === '/prompts') ? 'active' : ''}`}>
+        <Link
+          href="/my-prompts"
+          onClick={(e) => handleProtectedClick(e, '/my-prompts')}
+          className={`mobile-nav-item ${pathname === '/my-prompts' ? 'active' : ''}`}
+        >
           <PenTool size={20} />
-          <span>Explore</span>
+          <span> MyPrompts</span>
         </Link>
 
-        <Link 
-          href="/collections" 
+        <Link
+          href="/collections"
           onClick={(e) => handleProtectedClick(e, '/collections')}
           className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}
         >
@@ -42,8 +46,8 @@ export const MobileBottomNav = () => {
           <span>Saved</span>
         </Link>
 
-        <Link 
-          href="/profile" 
+        <Link
+          href="/profile"
           onClick={(e) => handleProtectedClick(e, '/profile')}
           className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}
         >

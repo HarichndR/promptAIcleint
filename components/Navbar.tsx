@@ -94,8 +94,14 @@ export const Navbar = () => {
             )}
             
             <div className="flex-row hide-mobile" style={{ marginLeft: showSearch ? '20px' : '0', gap: '8px' }}>
-              <Link href="/" className="nav-link">Explore</Link>
+              <Link href="/" className="nav-link">Home</Link>
               <Link href="/guide" className="nav-link">Guide</Link>
+              {user && (
+                <>
+                  <Link href="/collections" className="nav-link">My Collection</Link>
+                  <Link href="/my-prompts" className="nav-link">My Prompts</Link>
+                </>
+              )}
             </div>
           </div>
 

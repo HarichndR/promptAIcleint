@@ -146,13 +146,28 @@ export default function ProfilePage() {
                    <MapPin size={16} />
                    <span>Global Creator</span>
                 </div>
-                <button 
+                <Link 
+                    href="/collections"
+                    className="flex-row"
+                    style={{
+                      gap: '8px', color: 'var(--color-primary)', fontSize: '0.9rem',
+                      background: 'var(--color-primary-soft)', padding: '8px 16px', borderRadius: '8px',
+                      fontWeight: 700, textDecoration: 'none', transition: 'all 0.2s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(37, 99, 235, 0.2)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-soft)'}
+                 >
+                    <Bookmark size={16} />
+                    <span>Saved Prompts</span>
+                 </Link>
+
+                 <button 
                   onClick={() => { logout(); router.push('/'); }} 
                   className="flex-row" 
                   style={{ 
                     gap: '8px', color: 'var(--color-error)', fontSize: '0.9rem', 
                     background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600,
-                    marginLeft: 'auto', padding: '8px 16px', borderRadius: '8px', transition: 'all 0.2s'
+                    padding: '8px 16px', borderRadius: '8px', transition: 'all 0.2s'
                   }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-error-soft)'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}

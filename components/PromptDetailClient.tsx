@@ -28,12 +28,16 @@ export default function PromptDetailClient({ prompt }: PromptDetailClientProps) 
     alert('Prompt copied to clipboard!');
   };
 
-  const handleShare = () => {
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/prompts/${prompt._id}`;
+    
     if (navigator.share) {
-      navigator.share({ title: prompt.title, url: window.location.href });
+      navigator.share({ title: prompt.title, url: shareUrl }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard');
+      navigator.clipboard.writeText(shareUrl);
+      alert('Link copied to clipboard! 🚀');
     }
   };
 

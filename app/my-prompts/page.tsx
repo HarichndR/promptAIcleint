@@ -6,7 +6,8 @@ import { Prompt, Category } from '@/types';
 import { categoryApi, promptApi } from '@/services/api';
 import { useAuthContext } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { PenTool, Edit2, Trash2, Loader2, X, Save } from 'lucide-react';
+import { StickyAddButton } from '@/components/ui/StickyAddButton';
+import { Edit2, Trash2, Loader2, X, Save } from 'lucide-react';
 
 export default function MyPromptsPage() {
   const router = useRouter();
@@ -105,8 +106,9 @@ export default function MyPromptsPage() {
   if (loading || !user) return null;
 
   return (
-    <div className="animate-reveal">
-      <StickyPostButton />
+    <React.Fragment>
+      <StickyAddButton />
+      <div className="animate-reveal">
 
       {/* EDIT MODAL */}
       {editingPrompt && (
@@ -244,24 +246,7 @@ export default function MyPromptsPage() {
         )}
       </section>
     </div>
+    </React.Fragment>
   );
 }
 
-function StickyPostButton() {
-  const router = useRouter();
-  return (
-    <button
-      onClick={() => router.push('/prompts/create')}
-      className="btn-base btn-primary flex-center"
-      style={{
-        position: 'fixed', bottom: '100px', right: '24px',
-        width: '56px', height: '56px', borderRadius: '50%',
-        boxShadow: '0 12px 32px rgba(37, 99, 235, 0.4)',
-        zIndex: 2000, padding: 0, minWidth: 'auto'
-      }}
-      title="Post New Prompt"
-    >
-      <PenTool size={22} />
-    </button>
-  );
-}
