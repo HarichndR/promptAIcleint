@@ -12,7 +12,7 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/prompts');
+      router.push('/');
     }
   }, [user, loading, router]);
 

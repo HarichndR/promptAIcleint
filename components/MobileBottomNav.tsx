@@ -8,7 +8,14 @@ import { useAuth } from '@/hooks/useAuth';
 
 export const MobileBottomNav = () => {
   const pathname = usePathname();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, openAuthModal } = useAuth();
+
+  const handleProtectedClick = (e: React.MouseEvent, href: string) => {
+    if (!user) {
+      e.preventDefault();
+      openAuthModal('login', 'Please login to access this feature');
+    }
+  };
 
   // Hide only for admins (they have a specific admin dashboard layout)
   if (isAdmin) return null;
@@ -26,25 +33,23 @@ export const MobileBottomNav = () => {
           <span>Explore</span>
         </Link>
 
-        {user ? (
-          <>
-            <Link href="/collections" className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}>
-              <Bookmark size={20} />
-              <span>Saved</span>
-            </Link>
-            <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}>
-              <User size={20} />
-              <span>Profile</span>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className={`mobile-nav-item ${pathname === '/login' ? 'active' : ''}`}>
-              <User size={20} />
-              <span>Login</span>
-            </Link>
-          </>
-        )}
+        <Link 
+          href="/collections" 
+          onClick={(e) => handleProtectedClick(e, '/collections')}
+          className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}
+        >
+          <Bookmark size={20} />
+          <span>Saved</span>
+        </Link>
+
+        <Link 
+          href="/profile" 
+          onClick={(e) => handleProtectedClick(e, '/profile')}
+          className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}
+        >
+          <User size={20} />
+          <span>Profile</span>
+        </Link>
       </div>
     </nav>
   );

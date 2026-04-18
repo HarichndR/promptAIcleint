@@ -64,8 +64,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(data.user);
   };
 
-  const openAuthModal = (tab: 'login' | 'register' = 'login') => {
-    router.push(`/${tab}`);
+  const openAuthModal = (tab: 'login' | 'register' = 'login', message?: string) => {
+    const query = message ? `?message=${encodeURIComponent(message)}` : '';
+    router.push(`/${tab}${query}`);
   };
 
   const closeAuthModal = () => {
