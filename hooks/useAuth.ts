@@ -1,7 +1,7 @@
 import { useAuthContext } from '../context/AuthContext';
 
 export const useAuth = () => {
-  const { user, loading, logout, openAuthModal } = useAuthContext();
+  const { user, loading, isAdmin, logout, openAuthModal } = useAuthContext();
   
   const requireAuth = (action: () => void) => {
     if (!user) {
@@ -16,7 +16,7 @@ export const useAuth = () => {
     loading,
     isAuthenticated: !!user,
     requireAuth,
-    isAdmin: user?.role === 'admin',
+    isAdmin,
     logout,
     openAuthModal,
   };

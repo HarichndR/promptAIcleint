@@ -7,6 +7,7 @@ import { PromptCard } from '@/components/PromptCard';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { useAuth } from '@/hooks/useAuth';
 import { Bookmark, Sparkles, Compass, BookOpen } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function CollectionsPage() {

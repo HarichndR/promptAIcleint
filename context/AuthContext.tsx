@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isAdmin: boolean;
   login: (credentials: any) => Promise<void>;
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
@@ -77,6 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{
       user,
       loading,
+      isAdmin: user?.role === 'admin',
       login,
       register,
       logout,
