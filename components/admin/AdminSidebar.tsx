@@ -13,10 +13,12 @@ import {
   ExternalLink,
   ShieldCheck,
   X,
-  ArrowLeft
+  ArrowLeft,
+  LogOut
 } from 'lucide-react';
 
 import styles from '@/app/admin/Admin.module.css';
+import { useAuth } from '@/hooks/useAuth';
 
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
@@ -34,13 +36,12 @@ interface SidebarProps {
 
 export const AdminSidebar = ({ isOpen, onClose }: SidebarProps) => {
   const pathname = usePathname();
+  const { logout } = useAuth();
 
-  const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/prompts', label: 'Prompts', icon: Sparkles },
-    { href: '/admin/categories', label: 'Categories', icon: FolderTree },
-    { href: '/admin/profile', label: 'Profile', icon: UserCircle },
-  ];
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = '/login';
+  };
 
   return (
     <>
@@ -59,7 +60,7 @@ export const AdminSidebar = ({ isOpen, onClose }: SidebarProps) => {
           </button>
         </div>
         
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -79,9 +80,35 @@ export const AdminSidebar = ({ isOpen, onClose }: SidebarProps) => {
           })}
         </nav>
 
-        <Link href="/" className={styles.backLink}>
-          <ArrowLeft size={16} /> Exit to Site
-        </Link>
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px' }}>
+          <Link href="/" className={styles.backLink}>
+            <ArrowLeft size={16} /> Exit to Site
+          </Link>
+          
+          <button 
+            onClick={handleLogout}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '12px', 
+              padding: '12px 16px', 
+              width: '100%', 
+              background: 'rgba(239, 68, 68, 0.1)', 
+              border: '1px solid rgba(239, 68, 68, 0.2)', 
+              borderRadius: '8px',
+              color: '#ef4444',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)')}
+            onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)')}
+          >
+            <LogOut size={18} />
+            Logout Session
+          </button>
+        </div>
       </aside>
     </>
   );
