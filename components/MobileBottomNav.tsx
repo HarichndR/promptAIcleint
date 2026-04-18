@@ -15,35 +15,37 @@ export const MobileBottomNav = () => {
 
   return (
     <nav className="mobile-bottom-nav">
-      <Link href="/" className={`mobile-nav-item ${pathname === '/' ? 'active' : ''}`}>
-        <Home size={20} />
-        <span>Home</span>
-      </Link>
+      <div className="site-container flex-row" style={{ height: '100%', width: '100%', padding: '0 var(--space-2)' }}>
+        <Link href="/" className={`mobile-nav-item ${pathname === '/' ? 'active' : ''}`}>
+          <Home size={20} />
+          <span>Home</span>
+        </Link>
 
-      <Link href="/prompts" className={`mobile-nav-item ${(pathname === '/prompts') ? 'active' : ''}`}>
-        <PenTool size={20} />
-        <span>Explore</span>
-      </Link>
+        <Link href="/prompts" className={`mobile-nav-item ${(pathname === '/prompts') ? 'active' : ''}`}>
+          <PenTool size={20} />
+          <span>Explore</span>
+        </Link>
 
-      {user ? (
-        <>
-          <Link href="/collections" className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}>
-            <Bookmark size={20} />
-            <span>Saved</span>
-          </Link>
-          <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}>
-            <User size={20} />
-            <span>Profile</span>
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link href="/login" className={`mobile-nav-item ${pathname === '/login' ? 'active' : ''}`}>
-            <User size={20} />
-            <span>Login</span>
-          </Link>
-        </>
-      )}
+        {user ? (
+          <>
+            <Link href="/collections" className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}>
+              <Bookmark size={20} />
+              <span>Saved</span>
+            </Link>
+            <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}>
+              <User size={20} />
+              <span>Profile</span>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className={`mobile-nav-item ${pathname === '/login' ? 'active' : ''}`}>
+              <User size={20} />
+              <span>Login</span>
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
