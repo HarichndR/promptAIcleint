@@ -97,18 +97,18 @@ export default function PromptDetailClient({ prompt }: PromptDetailClientProps) 
                   <MarkdownRenderer content={prompt.promptText} />
                   {!isExpanded && (
                     <div style={{ 
-                      position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px', 
-                      background: 'linear-gradient(transparent, white)', pointerEvents: 'none' 
+                      position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', 
+                      background: 'linear-gradient(transparent, #ffffff)', pointerEvents: 'none' 
                     }} />
                   )}
                 </div>
 
 
-                {prompt.promptText.length > 100 && (
+                {prompt.promptText.length > 50 && (
                   <button 
                     onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
                     className="flex-row"
-                    style={{ marginTop: '24px', color: 'var(--color-primary)', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer', gap: '4px', fontSize: '0.9rem' }}
+                    style={{ marginTop: '16px', color: 'var(--color-primary)', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer', gap: '4px', fontSize: '0.9rem' }}
                   >
                     {isExpanded ? 'Read Less' : 'Read Full Prompt'} <ChevronRight size={18} style={{ transform: isExpanded ? 'rotate(-90deg)' : 'none', transition: 'transform 0.3s ease' }} />
                   </button>
@@ -118,12 +118,31 @@ export default function PromptDetailClient({ prompt }: PromptDetailClientProps) 
               {/* DESCRIPTION & SPECS */}
               <section style={{ marginTop: '48px' }}>
                 <div className="grid-2">
-                   <div>
+                    <div>
                       <h4 className="spec-label" style={{ marginBottom: '16px' }}>Technical Logic</h4>
-                      <div className="markdown-container">
+                      <div className="markdown-container" style={{ 
+                        maxHeight: isExpanded ? 'none' : '200px', 
+                        overflow: 'hidden', 
+                        position: 'relative',
+                        transition: 'max-height 0.4s ease'
+                      }}>
                         <MarkdownRenderer content={prompt.description} />
+                        {!isExpanded && prompt.description.length > 300 && (
+                          <div style={{ 
+                            position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', 
+                            background: 'linear-gradient(transparent, white)', pointerEvents: 'none' 
+                          }} />
+                        )}
                       </div>
-                   </div>
+                      {prompt.description.length > 300 && (
+                        <button 
+                          onClick={() => setIsExpanded(!isExpanded)}
+                          style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', marginTop: '12px' }}
+                        >
+                          {isExpanded ? 'Show less' : 'Read more'}
+                        </button>
+                      )}
+                    </div>
                    <div>
                       <h4 className="spec-label" style={{ marginBottom: '16px' }}>Prompt Engineering Specs</h4>
                       <SpecsGrid prompt={prompt} />

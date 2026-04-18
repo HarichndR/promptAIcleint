@@ -411,7 +411,7 @@ p { color: var(--color-text-secondary); line-height: 1.6; }
 }
 
 .prompt-collapsed-preview {
-  max-height: 180px;
+  max-height: 80px;
   overflow: hidden;
 }
 
@@ -490,13 +490,17 @@ p { color: var(--color-text-secondary); line-height: 1.6; }
   right: 16px;
   background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(12px);
-  padding: 4px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 12px;
   display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   z-index: 100;
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   border: 1px solid rgba(255,255,255,0.1);
   transition: transform 0.2s ease;
+  height: auto !important;
+  width: auto !important;
 }
 
 .action-overlay:hover { transform: scale(1.05); }
