@@ -12,8 +12,8 @@ interface ActionOverlayProps {
 }
 
 export const ActionOverlay: React.FC<ActionOverlayProps> = ({ onCopy }) => (
-  <div className="action-overlay" style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', padding: '4px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, boxShadow: '0 8px 24px rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.1)', transition: 'transform 0.2s ease', height: 'auto' }}>
-    <button className="overlay-btn" onClick={onCopy} title="Copy Prompt" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', color: 'white', border: 'none', background: 'transparent', cursor: 'pointer' }}>
+  <div className="action-overlay">
+    <button className="overlay-btn" onClick={onCopy} title="Copy Prompt">
       <Copy size={20} />
     </button>
   </div>
