@@ -10,30 +10,40 @@ export const MobileBottomNav = () => {
   const pathname = usePathname();
   const { user, isAdmin } = useAuth();
 
-  // Only show for logged-in, non-admin users
-  if (!user || isAdmin) return null;
+  // Hide only for admins (they have a specific admin dashboard layout)
+  if (isAdmin) return null;
 
   return (
     <nav className="mobile-bottom-nav">
-      <Link href="/prompts" className={`mobile-nav-item ${(pathname === '/prompts' || pathname === '/') ? 'active' : ''}`}>
+      <Link href="/" className={`mobile-nav-item ${pathname === '/' ? 'active' : ''}`}>
         <Home size={20} />
         <span>Home</span>
       </Link>
 
-      <Link href="/my-prompts" className={`mobile-nav-item ${pathname === '/my-prompts' ? 'active' : ''}`}>
+      <Link href="/prompts" className={`mobile-nav-item ${(pathname === '/prompts') ? 'active' : ''}`}>
         <PenTool size={20} />
-        <span>My Prompts</span>
+        <span>Explore</span>
       </Link>
 
-      <Link href="/collections" className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}>
-        <Bookmark size={20} />
-        <span>Saved</span>
-      </Link>
-
-      <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}>
-        <User size={20} />
-        <span>Profile</span>
-      </Link>
+      {user ? (
+        <>
+          <Link href="/collections" className={`mobile-nav-item ${pathname === '/collections' ? 'active' : ''}`}>
+            <Bookmark size={20} />
+            <span>Saved</span>
+          </Link>
+          <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`}>
+            <User size={20} />
+            <span>Profile</span>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link href="/login" className={`mobile-nav-item ${pathname === '/login' ? 'active' : ''}`}>
+            <User size={20} />
+            <span>Login</span>
+          </Link>
+        </>
+      )}
     </nav>
   );
-};
+}
